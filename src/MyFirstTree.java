@@ -68,6 +68,37 @@ class BinarSearchTree {
         if(root.data > key){return search(root.left, key);}
         else {return search(root.right, key);}
     }
+
+    public void Delete(int key){
+        root = deleteRecursive(root, key);
+    }
+
+    private TreeNode deleteRecursive(TreeNode root, int key){
+        if(root == null){ return root; }
+        if(key < root.data){
+            root.left = deleteRecursive(root.left, key);
+        } else if (key > root.data){
+            root.right = deleteRecursive(root.right, key);
+        } else {
+            if(root.left == null){
+                return root.right;
+            } else if (root.right == null){
+                return root.left;
+            } else{
+                root.data = minValue(root.right);
+                root.right = deleteRecursive(root.right, root.data);
+            }
+        }
+        return root;
+    }
+
+    private int minValue(TreeNode root){
+        int minv = root.data;
+        while(root.left != null){
+            minv = root.left.data;
+            root = root.left;
+        } return minv;
+    }
 }
 
 public class MyFirstTree {
@@ -89,10 +120,13 @@ public class MyFirstTree {
         tree.postOrder(tree.root);
         System.out.println(" ");
 
-        int key = 20;
+        int key = 30;
         if(tree.search(tree.root, key)){
             System.out.println(" Key found in Tree ");
         }
         else {System.out.println(key + " is not there. ❌");}
+        System.out.println("Delete : ");
+        tree.Delete(key);
+        tree.inOrder(tree.root);
     }
 }
